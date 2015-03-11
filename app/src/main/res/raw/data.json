@@ -1,0 +1,310 @@
+{
+    "ingredients": {
+        "banane": {
+            "description": "Frutta",
+            "name": "Banane"
+        },
+        "carote": {
+            "description": "Verdura",
+            "name": "Carote"
+        },
+        "ceci": {
+            "description": "Verdura",
+            "name": "Ceci"
+        },
+        "cetrioli": {
+            "description": "Verdura",
+            "name": "Cetrioli"
+        },
+        "ciliegie": {
+            "description": "Frutta",
+            "name": "Ciliegie"
+        },
+        "cipolle": {
+            "description": "Verdura",
+            "name": "Cipolle"
+        },
+        "fagioli": {
+            "description": "Verdura",
+            "name": "Fagioli"
+        },
+        "farina": {
+            "description": "Grano e Riso",
+            "name": "Farina"
+        },
+        "fragole": {
+            "description": "Frutta",
+            "name": "Fragole"
+        },
+        "gamberi": {
+            "description": "Pesce",
+            "name": "Gamberi"
+        },
+        "insalata verde": {
+            "description": "Verdura",
+            "name": "Insalata verde"
+        },
+        "kiwi": {
+            "description": "Frutta",
+            "name": "Kiwi"
+        },
+        "latte": {
+            "description": "Latticini",
+            "name": "Latte"
+        },
+        "mango": {
+            "description": "Frutta",
+            "name": "Mango"
+        },
+        "mele": {
+            "description": "Frutta",
+            "name": "Mele"
+        },
+        "mirtilli": {
+            "description": "Frutta",
+            "name": "Mirtilli"
+        },
+        "mozzarella": {
+            "description": "Latticini",
+            "name": "Mozzarella"
+        },
+        "pasta": {
+            "description": "Grano e Riso",
+            "name": "Pasta"
+        },
+        "peperoni": {
+            "description": "Verdura",
+            "name": "Peperoni"
+        },
+        "piselli": {
+            "description": "Verdura",
+            "name": "Piselli"
+        },
+        "pollo": {
+            "description": "Carne",
+            "name": "Pollo"
+        },
+        "pomodori": {
+            "description": "Verdura",
+            "name": "Pomodori"
+        },
+        "riso": {
+            "description": "Grano e Riso",
+            "name": "Riso"
+        },
+        "uova": {
+            "description": "Altro",
+            "name": "Uova"
+        },
+        "zucchero": {
+            "description": "Altro",
+            "name": "Zucchero"
+        },
+        "zucchine": {
+            "description": "Verdura",
+            "name": "Zucchine"
+        }
+    },
+    "levels": {
+        "1": [
+            {
+                "ingredients": [
+                    "mele",
+                    "banane",
+                    "fragole"
+                ],
+                "name": "Macedonia 1"
+            },
+            {
+                "ingredients": [
+                    "banane",
+                    "mirtilli",
+                    "kiwi",
+                    "ciliegie"
+                ],
+                "name": "Macedonia 2"
+            },
+            {
+                "ingredients": [
+                    "mele",
+                    "banane",
+                    "mirtilli",
+                    "kiwi",
+                    "ciliegie",
+                    "mango"
+                ],
+                "name": "Macedonia 3"
+            },
+            {
+                "ingredients": [
+                    "pomodori",
+                    "insalata verde",
+                    "carote"
+                ],
+                "name": "Insalata 1"
+            },
+            {
+                "ingredients": [
+                    "insalata verde",
+                    "cipolle",
+                    "cetrioli",
+                    "uova"
+                ],
+                "name": "Insalata 2"
+            },
+            {
+                "ingredients": [
+                    "pomodori",
+                    "insalata verde",
+                    "peperoni",
+                    "carote",
+                    "fagioli",
+                    "pollo"
+                ],
+                "name": "Insalata 3"
+            },
+            {
+                "ingredients": [
+                    "pomodori",
+                    "pasta"
+                ],
+                "name": "Spaghetti 1"
+            },
+            {
+                "ingredients": [
+                    "zucchine",
+                    "gamberi",
+                    "pasta"
+                ],
+                "name": "Spaghetti 2"
+            },
+            {
+                "ingredients": [
+                    "pomodori",
+                    "piselli",
+                    "pasta"
+                ],
+                "name": "Spaghetti 3"
+            },
+            {
+                "ingredients": [
+                    "peperoni",
+                    "cipolle",
+                    "piselli",
+                    "gamberi",
+                    "pollo",
+                    "riso"
+                ],
+                "name": "Paella mista"
+            },
+            {
+                "ingredients": [
+                    "piselli",
+                    "ceci",
+                    "fagioli"
+                ],
+                "name": "Minestra 1"
+            },
+            {
+                "ingredients": [
+                    "cipolle",
+                    "zucchine",
+                    "piselli",
+                    "carote",
+                    "ceci",
+                    "fagioli"
+                ],
+                "name": "Minestra 2"
+            },
+            {
+                "ingredients": [
+                    "cetrioli",
+                    "gamberi",
+                    "riso"
+                ],
+                "name": "Sushi"
+            },
+            {
+                "ingredients": [
+                    "fagioli",
+                    "riso"
+                ],
+                "name": "Feijoada"
+            },
+            {
+                "ingredients": [
+                    "pomodori",
+                    "zucchine",
+                    "carote",
+                    "ceci"
+                ],
+                "name": "Cous Cous"
+            },
+            {
+                "ingredients": [
+                    "pomodori",
+                    "insalata verde",
+                    "peperoni",
+                    "cipolle",
+                    "pollo"
+                ],
+                "name": "Kebab"
+            }
+        ],
+        "2": [
+            {
+                "ingredients": [
+                    "pomodori",
+                    "farina",
+                    "mozzarella"
+                ],
+                "name": "Pizza"
+            },
+            {
+                "ingredients": [
+                    "zucchero",
+                    "latte",
+                    "uova"
+                ],
+                "name": "Gelato alla crema"
+            },
+            {
+                "ingredients": [
+                    "mele",
+                    "farina",
+                    "zucchero",
+                    "uova"
+                ],
+                "name": "Torta di mele"
+            },
+            {
+                "ingredients": [
+                    "banane",
+                    "fragole",
+                    "mirtilli",
+                    "kiwi",
+                    "farina",
+                    "zucchero",
+                    "uova"
+                ],
+                "name": "Crostata di frutta"
+            },
+            {
+                "ingredients": [
+                    "mele",
+                    "farina",
+                    "zucchero",
+                    "uova"
+                ],
+                "name": "Studel"
+            },
+            {
+                "ingredients": [
+                    "cipolle",
+                    "ceci"
+                ],
+                "name": "Falafel"
+            }
+        ]
+    }
+}

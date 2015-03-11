@@ -1,0 +1,23 @@
+mele;banane;fragole;mirtilli;kiwi;ciliegie;mango;pomodori;insalata verde;peperoni;cipolle;cetrioli;zucchine;piselli;carote;ceci;fagioli;gamberi;pollo;riso;pasta;farina;zucchero;latte;mozzarella;uova
+Macedonia 1 (3 INGR);1;x;x;x;;;;;;;;;;;;;;;;;;;;;;;
+Macedonia 2 (4 INGR);1;;x;;x;x;x;;;;;;;;;;;;;;;;;;;;
+Macedonia 3 (6 INGR);1;x;x;;x;x;x;x;;;;;;;;;;;;;;;;;;;
+Insalata 1 (3 INGR);1;;;;;;;;x;x;;;;;;x;;;;;;;;;;;
+Insalata 2 (4 INGR);1;;;;;;;;;x;;x;x;;;;;;;;;;;;;;x
+Insalata 3 (6 INGR);1;;;;;;;;x;x;x;;;;;x;;x;;x;;;;;;;
+Spaghetti 1 (2 INGR);1;;;;;;;;x;;;;;;;;;;;;;x;;;;;
+Spaghetti 2 (3 INGR);1;;;;;;;;;;;;;x;;;;;x;;;x;;;;;
+Spaghetti 3 (4 INGR);1;;;;;;;;x;;;;;;x;;;;;;;x;;;;;
+Paella mista (6 INGR);1;;;;;;;;;;x;x;;;x;;;;x;x;x;;;;;;
+Minestra 1 (3 INGR);1;;;;;;;;;;;;;;x;;x;x;;;;;;;;;
+Minestra 2 (5 INGR);1;;;;;;;;;;;x;;x;x;x;x;x;;;;;;;;;
+Sushi (Nigiri+Maki);1;;;;;;;;;;;;x;;;;;;x;;x;;;;;;
+Feijoada;1;;;;;;;;;;;;;;;;;x;;;x;;;;;;
+Cous Cous;1;;;;;;;;x;;;;;x;;x;x;;;;;;;;;;
+Kebab;1;;;;;;;;x;x;x;x;;;;;;;;x;;;;;;;
+Pizza;2;;;;;;;;x;;;;;;;;;;;;;;x;;;x;
+Gelato alla crema;2;;;;;;;;;;;;;;;;;;;;;;;x;x;;x
+Torta di mele;2;x;;;;;;;;;;;;;;;;;;;;;x;x;;;x
+Crostata di frutta;2;;x;x;x;x;;;;;;;;;;;;;;;;;x;x;;;x
+Studel;2;x;;;;;;;;;;;;;;;;;;;;;x;x;;;x
+Falafel;2;;;;;;;;;;;x;;;;;x;;;;;;;;;;

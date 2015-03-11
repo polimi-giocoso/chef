@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ChefPerUnGiorno</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="congrats">Complimenti!</string>
+    <string name="turn_done">Avete preparato perfettamente</string>
+    <string name="select_dish">Seleziona un piatto</string>
+    <string name="hey_chef">Hey Chef!</string>
+    <string name="prepare">Volete iniziare a preparare</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Sì</string>
+    <string name="no">No</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_choose_session">ChooseSession</string>
+    <string name="session_end">Partita terminata!</string>
+    <string name="error">Errore</string>
+    <string name="wifi_not_enabled">Attiva WiFi Direct per procedere</string>
+    <string name="title_activity_multi_player_config">MultiPlayerConfigActivity</string>
+    <string name="wait_begin">Attendo l\'inizio della partita...</string>
+    <string name="wait_slave">Attendo il secondo dispositivo...</string>
+    <string name="warning">Attenzione</string>
+    <string name="sureBack">Confermi di chiudere la sessione di gioco?</string>
+    <string name="insertEmail">Chef per un giorno</string>
+    <string name="cancel">Annulla</string>
+    <string name="whyEmail">È necessaria una mail per l\'invio dei dati</string>
+    <string name="default_mail">Nessuna mail inserita</string>
+
+</resources>
