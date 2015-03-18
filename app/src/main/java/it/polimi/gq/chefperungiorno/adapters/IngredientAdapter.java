@@ -43,7 +43,7 @@ public class IngredientAdapter extends ArrayAdapter<IngredientAdapter.Ingredient
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutId, parent, false);
-            row.setPadding(10,10,10,10);
+            row.setPadding(20,20,20,20 );
             holder = new RecordHolder();
             holder.imageItem = (ImageView) row.findViewById(R.id.item_image);
             row.setTag(holder);
@@ -53,11 +53,11 @@ public class IngredientAdapter extends ArrayAdapter<IngredientAdapter.Ingredient
         IngredientType item = types.get(position);
         int resID;
         if(item==IngredientType.EMPTY)
-            resID = R.drawable.ingredient;
+            resID = R.drawable.ingrediente;
         else if(item==IngredientType.OK)
-            resID = R.drawable.ok_ingredient;
+            resID = R.drawable.ingrediente_ok;
         else
-            resID = R.drawable.wr_ingredient;
+            resID = R.drawable.ingrediente_no;
 
         holder.imageItem.setImageResource(resID);
 

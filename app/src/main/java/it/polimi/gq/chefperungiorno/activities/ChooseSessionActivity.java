@@ -64,7 +64,7 @@ public class ChooseSessionActivity extends Activity {
         GridView gv = (GridView) findViewById(R.id.grid_dish);
 
         dishes = Game.allDishes();
-        selectedItems=new ArrayList<>();
+        selectedItems=new ArrayList<String>();
 
         DishAdapter dA=new DishAdapter(this, dishes, R.layout.row_items, selectedItems);
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,7 +127,7 @@ public class ChooseSessionActivity extends Activity {
 
     public void randomSession(View view) {
 
-        List<Dish> list = new ArrayList<>(dishes);
+        List<Dish> list = new ArrayList<Dish>(dishes);
         Collections.shuffle(list);
         String[] res = new String[numItems];
 

@@ -25,6 +25,6 @@
     <string name="insertEmail">Chef per un giorno</string>
     <string name="cancel">Annulla</string>
     <string name="whyEmail">È necessaria una mail per l\'invio dei dati</string>
-    <string name="default_mail">Nessuna mail inserita</string>
+    <string name="default_mail">Inserisci una mail</string>
 
 </resources>

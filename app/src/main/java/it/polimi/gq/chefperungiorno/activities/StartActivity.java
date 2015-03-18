@@ -52,7 +52,6 @@ public class StartActivity extends Activity {
 
         if(mail==null) {
             content=new SpannableString(getResources().getString(R.string.default_mail));
-            showAlertForEmailPref();
         }
         else{
             content=new SpannableString(mail);
@@ -88,11 +87,13 @@ public class StartActivity extends Activity {
         alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
-                PrefUtils.saveToPrefs(self, PrefUtils.PREFS_MAIL_KEY, value);
-                TextView textView = (TextView) self.findViewById(R.id.mail_text_view);
-                SpannableString content = new SpannableString(value);
-                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                textView.setText(content);
+                if(value.contains("@") && value.length()>5) {
+                    PrefUtils.saveToPrefs(self, PrefUtils.PREFS_MAIL_KEY, value);
+                    TextView textView = (TextView) self.findViewById(R.id.mail_text_view);
+                    SpannableString content = new SpannableString(value);
+                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                    textView.setText(content);
+                }
             }
         });
 

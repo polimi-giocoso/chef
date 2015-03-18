@@ -48,7 +48,7 @@ public class Game {
                     JSONObject dishObject = dishesArray.getJSONObject(i);
                     Dish dish = new Dish();
                     dish.setName(dishObject.getString("name"));
-                    dish.setImageName(dish.getName().toLowerCase().split(" ")[0]);
+                    dish.setImageName(dish.getName().toLowerCase().replace(" ", "_"));
                     JSONArray dishIngredients = dishObject.getJSONArray("ingredients");
                     for(int j=0; j<dishIngredients.length(); j++){
                         String ingredientName = dishIngredients.getString(j);
@@ -78,7 +78,7 @@ public class Game {
     }
 
     public static List<Dish> allDishes(){
-       return new ArrayList<>(dishes.values());
+       return new ArrayList<Dish>(dishes.values());
     }
 
     public static Dish dishWithName(String dishName){

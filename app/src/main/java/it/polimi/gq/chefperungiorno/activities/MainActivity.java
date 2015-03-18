@@ -37,6 +37,7 @@ import java.util.ListIterator;
 import it.polimi.gq.chefperungiorno.R;
 import it.polimi.gq.chefperungiorno.adapters.DishAdapter;
 import it.polimi.gq.chefperungiorno.adapters.IngredientAdapter;
+import it.polimi.gq.chefperungiorno.adapters.TableAdapter;
 import it.polimi.gq.chefperungiorno.model.Dish;
 import it.polimi.gq.chefperungiorno.model.Game;
 import it.polimi.gq.chefperungiorno.model.Ingredient;
@@ -62,7 +63,7 @@ public class MainActivity extends Activity implements TurnListener {
     private BeaconEventListener beaconSightingListener;
     private BeaconManager beaconManager;
     private IngredientAdapter ia;
-    private DishAdapter dA;
+    private TableAdapter dA;
     private String mode;
     int index;
     int maxIndex;
@@ -108,7 +109,7 @@ public class MainActivity extends Activity implements TurnListener {
                     @Override
                     public void onBeaconSighting (BeaconSighting sighting){
                         int rssi = sighting.getRSSI();
-                        //Log.i("Proximity", "SIGHT ID: " + sighting.getBeacon().getName() + " RSSI: " + rssi + "");
+                        Log.i("Proximity", "SIGHT ID: " + sighting.getBeacon().getName() + " RSSI: " + rssi + "");
 
                         if (turn == null)
                             return;
@@ -131,7 +132,7 @@ public class MainActivity extends Activity implements TurnListener {
 
     public void setup(){
 
-      dishes = new ArrayList<>();
+      dishes = new ArrayList<Dish>();
       Object[] names = (Object[]) getIntent().getExtras().get("dishes");
       for (Object d : names)
           dishes.add(Game.dishWithName((String) d));
@@ -147,16 +148,16 @@ public class MainActivity extends Activity implements TurnListener {
             maxIndex = index + Commons.DISH_COUNT;
         }
 
-        selectedItems=new ArrayList<>();
-        dA = new DishAdapter(this, dishes, R.layout.row_items, selectedItems);
+        selectedItems=new ArrayList<String>();
+        dA = new TableAdapter(this, dishes, R.layout.big_row_items, selectedItems);
         GridView gv = (GridView) findViewById(R.id.table);
         gv.setAdapter(dA);
 
-        types = new ArrayList<>();
+        types = new ArrayList<IngredientAdapter.IngredientType>();
 
         nextTurn();
 
-        ia = new IngredientAdapter(this, types, R.layout.row_items);
+        ia = new IngredientAdapter(this, types, R.layout.ing_row_item);
         gv = (GridView) findViewById(R.id.ingredients);
         gv.setAdapter(ia);
 
@@ -183,8 +184,6 @@ public class MainActivity extends Activity implements TurnListener {
         if (resID == 0)
             resID = R.drawable.food;
 
-        TextView textView = (TextView) findViewById(R.id.action_label);
-        textView.setText(d.getName());
         ImageView imageView = (ImageView) findViewById(R.id.selected_dish);
         imageView.setImageResource(resID);
 
@@ -209,12 +208,14 @@ public class MainActivity extends Activity implements TurnListener {
 
     public void onStart(){
         super.onStart();
-        System.out.println("Start");
+
         Gimbal.setApiKey(this.getApplication(), "0a32127b-b7e9-4314-adb7-489876c4ba3d");
         beaconManager = new BeaconManager();
         beaconManager.addListener(beaconSightingListener);
         PlaceManager.getInstance().startMonitoring();
         beaconManager.startListening();
+        System.out.println("Starting beacons");
+
     }
 
 

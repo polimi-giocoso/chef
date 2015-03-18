@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ChefPerUnGiorno.iml" filepath="$PROJECT_DIR$/ChefPerUnGiorno.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chef-per-un-giorno.iml" filepath="$PROJECT_DIR$/chef-per-un-giorno.iml" />
     </modules>
   </component>
 </project>
