@@ -42,7 +42,7 @@ public class TableAdapter extends ArrayAdapter<Dish> {
         RecordHolder holder = null;
         if (row == null) {
             row = inflater.inflate(layoutId, parent, false);
-            row.setPadding(20,20,20,20);
+        //    row.setPadding(20,20,20,20);
             holder = new RecordHolder();
 
             holder.imageItem = (ImageView) row.findViewById(R.id.item_image);

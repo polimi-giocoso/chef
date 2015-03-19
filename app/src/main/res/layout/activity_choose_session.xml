@@ -8,16 +8,6 @@
 
     tools:context="it.polimi.gq.chefperungiorno.activities.ChooseSessionActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Chef Per Un Giorno"
-        android:id="@+id/title"
-        android:textSize="50dp"
-        android:textColor="#ff7db5ff"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,10 +15,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Seleziona n piatti"
         android:id="@+id/action_label"
-        android:textSize="28dp"
+        android:textSize="38dp"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/tertiary_text_dark"/>
 
     <GridView
         android:id="@+id/grid_dish"
@@ -42,6 +32,7 @@
         android:stretchMode="columnWidth"
         android:layout_above="@+id/buttons_layout"
         android:layout_marginBottom="30dp"
+        android:listSelector="#a9a9a9"
 
         />
     <LinearLayout

@@ -155,11 +155,13 @@ public class MainActivity extends Activity implements TurnListener {
 
         types = new ArrayList<IngredientAdapter.IngredientType>();
 
-        nextTurn();
 
         ia = new IngredientAdapter(this, types, R.layout.ing_row_item);
         gv = (GridView) findViewById(R.id.ingredients);
         gv.setAdapter(ia);
+
+        nextTurn();
+
 
     }
 
@@ -193,6 +195,8 @@ public class MainActivity extends Activity implements TurnListener {
         for(int j=0; j<i; j++){
             types.add(IngredientAdapter.IngredientType.EMPTY);
         }
+
+        ia.notifyDataSetChanged();
 
         turn = new Turn(d, this);
 
@@ -241,18 +245,35 @@ public class MainActivity extends Activity implements TurnListener {
 
 
     @Override
-    public void dishCompleted(Turn g, final TurnResult result) {
+    public void dishCompleted(final Turn g, final TurnResult result) {
         if (g == turn) {
             Log.i("Main","Completed");
-            selectedItems.add(g.getDish().getName());
-            dA.notifyDataSetChanged();
+
 
             Commons.sendMessage("dish," + g.getDish().getName());
 
             Commons.sendEmail(result, this);
 
+            if(index==maxIndex){
+                selectedItems.add(g.getDish().getName());
+                dA.notifyDataSetChanged();
+                nextTurn();
 
-            nextTurn();
+            }
+            else {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.congrats_dish)
+                        .setMessage(getResources().getString(R.string.turn_done))
+                        .setPositiveButton(R.string.cont, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                selectedItems.add(g.getDish().getName());
+                                dA.notifyDataSetChanged();
+                                nextTurn();
+                            }
+                        }).setCancelable(false).show();
+            }
+
         }
     }
 

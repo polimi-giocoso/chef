@@ -66,24 +66,24 @@ public class ChooseSessionActivity extends Activity {
         dishes = Game.allDishes();
         selectedItems=new ArrayList<String>();
 
-        DishAdapter dA=new DishAdapter(this, dishes, R.layout.row_items, selectedItems);
+        final DishAdapter dA=new DishAdapter(this, dishes, R.layout.row_items, selectedItems);
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Button button = (Button) findViewById(R.id.ok_button);
                 Dish dish = dishes.get(position);
                if(selectedItems.contains(dish.getName())){
-                   view.setBackgroundColor(Color.TRANSPARENT);
                    selectedItems.remove(dish.getName());
                    button.setEnabled(false);
                }
                else if(selectedItems.size() < numItems) {
-                   view.setBackgroundColor(Color.GREEN);
                    selectedItems.add(dish.getName());
                    if(selectedItems.size()==numItems){
                        button.setEnabled(true);
                    }
                }
+
+                dA.notifyDataSetChanged();
             }
         });
         gv.setAdapter(dA);
@@ -134,7 +134,8 @@ public class ChooseSessionActivity extends Activity {
         for(int i=0; i<numItems; i++){
             res[i]=list.get(i).getName();
         }
-
+        res[0]="Macedonia 1";
+        res[1]="Macedonia 1";
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("mode", mode);
         intent.putExtra("dishes", res);
@@ -145,6 +146,12 @@ public class ChooseSessionActivity extends Activity {
     @Override
     public void onBackPressed() {
         final Activity self = this;
+        if(this.mode.equals(Commons.SINGLE_MODE))
+        {
+            super.onBackPressed();
+            return;
+        }
+
         new AlertDialog.Builder(this)
                 .setTitle(R.string.warning)
                 .setMessage(getResources().getString(R.string.sureBack))

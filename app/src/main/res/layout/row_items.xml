@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:textSize="25dp" >
+        android:textSize="25dp"
+        android:textColor="@android:color/darker_gray">
     </TextView>
 </LinearLayout>
 

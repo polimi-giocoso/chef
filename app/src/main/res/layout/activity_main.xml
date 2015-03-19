@@ -3,8 +3,8 @@
     android:layout_height="match_parent"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
-    android:paddingTop="48dp"
-    android:paddingBottom="48dp" tools:context=".MainActivity"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp" tools:context=".MainActivity"
     android:id="@+id/linear_main"
     android:background="@drawable/sfondo"
     android:orientation="horizontal">
@@ -17,31 +17,29 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_below="@+id/logo"
             android:background="@drawable/tovaglia"
             android:layout_gravity="center_vertical">
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:id="@+id/tazza"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
                 android:src="@drawable/tazza"
+                android:layout_above="@+id/table"
                 />
             <GridView
                android:id="@+id/table"
                android:numColumns="2"
-               android:layout_width="fill_parent"
+               android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:columnWidth="220dp"
+               android:layout_centerInParent = "true"
                android:listSelector="#00000000"
                android:gravity="center"
-               android:layout_gravity="center_vertical"
-               android:stretchMode="spacingWidthUniform"
-                android:layout_below="@+id/tazza"
-                android:layout_alignParentStart="true" />
+                />
         </RelativeLayout>
         <RelativeLayout
             android:paddingLeft="16dp"

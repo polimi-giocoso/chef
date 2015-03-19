@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+
 import it.polimi.gq.chefperungiorno.R;
 import it.polimi.gq.chefperungiorno.model.Dish;
 
@@ -81,11 +82,14 @@ public class DishAdapter extends ArrayAdapter<Dish> {
 
         if(selectedItems!=null){
             if(selectedItems.contains(item.getName())){
-                row.setBackgroundColor(Color.GREEN);
+                row.setBackgroundColor(Color.parseColor("#a9a9a9"));
+                holder.txtTitle.setTextColor(Color.DKGRAY);
             }
             else
             {
                 row.setBackgroundColor(Color.TRANSPARENT);
+                holder.txtTitle.setTextColor(Color.GRAY);
+
             }
         }
         return row;
