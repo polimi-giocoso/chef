@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.alljoyn.bus.BusException;
@@ -65,25 +66,30 @@ public class ChooseSessionActivity extends Activity {
 
         dishes = Game.allDishes();
         selectedItems=new ArrayList<String>();
-
+        ImageButton button = (ImageButton) findViewById(R.id.ok_button);
+        button.setEnabled(false);
         final DishAdapter dA=new DishAdapter(this, dishes, R.layout.row_items, selectedItems);
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Button button = (Button) findViewById(R.id.ok_button);
+                ImageButton button = (ImageButton) findViewById(R.id.ok_button);
                 Dish dish = dishes.get(position);
                if(selectedItems.contains(dish.getName())){
                    selectedItems.remove(dish.getName());
+
                    button.setEnabled(false);
                }
                else if(selectedItems.size() < numItems) {
                    selectedItems.add(dish.getName());
+
                    if(selectedItems.size()==numItems){
                        button.setEnabled(true);
                    }
                }
-
+                ((GridView)parent).clearChoices();
                 dA.notifyDataSetChanged();
+
+
             }
         });
         gv.setAdapter(dA);
@@ -134,8 +140,7 @@ public class ChooseSessionActivity extends Activity {
         for(int i=0; i<numItems; i++){
             res[i]=list.get(i).getName();
         }
-        res[0]="Macedonia 1";
-        res[1]="Macedonia 1";
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("mode", mode);
         intent.putExtra("dishes", res);

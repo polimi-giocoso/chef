@@ -30,12 +30,13 @@ import it.polimi.gq.chefperungiorno.utils.Commons;
 
 public class MultiPlayerConfigActivity extends Activity {
 
-    private ToggleButton mySwitch;
-    private boolean created;
     private  BusAttachment mBus;
     static int sessionId;
     static String joinerName;
+    private boolean created;
     private boolean destroyed;
+    boolean sessionEstablished = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +44,6 @@ public class MultiPlayerConfigActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_multi_player_config);
-        mySwitch = (ToggleButton) findViewById(R.id.role_switch);
     }
 
     protected void onDestroy(){
@@ -57,73 +57,118 @@ public class MultiPlayerConfigActivity extends Activity {
 
     }
 
-    boolean sessionEstablished = false;
 
-    public void startSearch(View view){
+    public void join(View view){
+
         created=true;
         TextView textView = (TextView) findViewById(R.id.status_label);
-        mySwitch.setEnabled(false);
-        view.setEnabled(false);
+
+        View b1 = (View) findViewById(R.id.button_host);
+        View b2 = (View) findViewById(R.id.button_join);
+        b1.setEnabled(false);
+        b2.setEnabled(false);
+
         mBus=Commons.sharedBus;
         final Activity self = this;
         MultiPlayerService mySignalInterface = Commons.sharedInterface;
 
-        Status status;
+        Status status = mBus.connect();
+
+        if (status != Status.OK) {
+            System.exit(0);
+            return;
+        }
+
+        mBus.registerBusListener(Commons.sharedBusListener);
 
 
-        if(!mySwitch.isChecked()) {
+        status = Commons.sharedBus.registerSignalHandlers(this);
+        if(status!=Status.OK) {
+            System.exit(0);
+            return;
+        }
 
-            status = mBus.connect();
-            if (status != Status.OK) {
-                System.exit(0);
-                return;
-            }
-            int flags = 0; //do not use any request name flags
-            status = mBus.requestName(Commons.key, flags);
-            if (status != Status.OK) {
-                System.exit(0);
-                return;
-            }
 
-            status = mBus.advertiseName(Commons.key,
-                    SessionOpts.TRANSPORT_ANY);
-            if (status != Status.OK) {
-                System.out.println("Status = " + status);
-                System.exit(0);
-                return;
-            }
+        status = mBus.findAdvertisedName(Commons.key);
+        if (status != Status.OK) {
+            System.exit(0);
+            return;
+        }
 
-            Mutable.ShortValue contactPort = new Mutable.ShortValue(Commons.CONTACT_PORT);
-            SessionOpts sessionOpts = new SessionOpts();
-            sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
-            sessionOpts.isMultipoint = false;
-            sessionOpts.proximity = SessionOpts.PROXIMITY_ANY;
-            sessionOpts.transports = SessionOpts.TRANSPORT_ANY;
+        textView.setText(R.string.wait_begin);
 
-            status = mBus.bindSessionPort(contactPort, sessionOpts,
-                    new SessionPortListener() {
-                        public boolean acceptSessionJoiner(short sessionPort, String joiner,
-                                                           SessionOpts sessionOpts) {
-                            if (sessionPort == Commons.CONTACT_PORT) {
-                                return true;
-                            } else {
-                                return false;
-                            }
 
+
+    }
+
+
+
+    public void host(View view){
+        created=true;
+        TextView textView = (TextView) findViewById(R.id.status_label);
+
+        View b1 = (View) findViewById(R.id.button_host);
+        View b2 = (View) findViewById(R.id.button_join);
+        b1.setEnabled(false);
+        b2.setEnabled(false);
+
+        mBus=Commons.sharedBus;
+        final Activity self = this;
+        MultiPlayerService mySignalInterface = Commons.sharedInterface;
+
+        Status status = mBus.connect();
+        if (status != Status.OK) {
+            System.exit(0);
+            return;
+        }
+
+        int flags = 0; //do not use any request name flags
+        status = mBus.requestName(Commons.key, flags);
+        if (status != Status.OK) {
+            System.exit(0);
+            return;
+        }
+
+        status = mBus.advertiseName(Commons.key,
+                SessionOpts.TRANSPORT_ANY);
+        if (status != Status.OK) {
+            System.out.println("Status = " + status);
+            System.exit(0);
+            return;
+        }
+
+        Mutable.ShortValue contactPort = new Mutable.ShortValue(Commons.CONTACT_PORT);
+        SessionOpts sessionOpts = new SessionOpts();
+        sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
+        sessionOpts.isMultipoint = false;
+        sessionOpts.proximity = SessionOpts.PROXIMITY_ANY;
+        sessionOpts.transports = SessionOpts.TRANSPORT_ANY;
+
+        status = mBus.bindSessionPort(contactPort, sessionOpts,
+                new SessionPortListener() {
+                    public boolean acceptSessionJoiner(short sessionPort, String joiner,
+                                                       SessionOpts sessionOpts) {
+                        if (sessionPort == Commons.CONTACT_PORT) {
+                            return true;
+                        } else {
+                            return false;
                         }
-                        public void sessionJoined(short sessionPort, int id, String joiner) {
-                            sessionEstablished = true;
-                            Commons.setSessionId(id);
-                            joinerName = joiner;
-                        }
-                    });
-            status = Commons.sharedBus.registerSignalHandlers(this);
-            textView.setText(R.string.wait_slave);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (!sessionEstablished) {
+
+                    }
+                    public void sessionJoined(short sessionPort, int id, String joiner) {
+                        sessionEstablished = true;
+                        Commons.setSessionId(id);
+                        joinerName = joiner;
+                    }
+                });
+
+        status = Commons.sharedBus.registerSignalHandlers(this);
+        textView.setText(R.string.wait_slave);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (!sessionEstablished) {
                         if(destroyed)
                             return;
                         Thread.sleep(10);
@@ -137,43 +182,14 @@ public class MultiPlayerConfigActivity extends Activity {
                         }
                     });
 
-                    }
-                    catch (Exception e){
-                    }
                 }
-            }).start();
-
-
-        }
-        else{
-
-            status = mBus.connect();
-
-            if (status != Status.OK) {
-                System.exit(0);
-                return;
+                catch (Exception e){
+                }
             }
-
-            mBus.registerBusListener(Commons.sharedBusListener);
-
-
-            status = Commons.sharedBus.registerSignalHandlers(this);
-            if(status!=Status.OK) {
-                System.exit(0);
-                return;
-            }
+        }).start();
 
 
-            status = mBus.findAdvertisedName(Commons.key);
-            if (status != Status.OK) {
-                System.exit(0);
-                return;
-            }
 
-            textView.setText(R.string.wait_begin);
-
-
-        }
     }
 
     @Override

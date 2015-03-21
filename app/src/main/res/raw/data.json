@@ -296,14 +296,14 @@
                     "zucchero",
                     "uova"
                 ],
-                "name": "Studel"
+                "name": "Strudel"
             },
             {
                 "ingredients": [
                     "cipolle",
                     "ceci"
                 ],
-                "name": "Falafel"
+                "name": "Felafel"
             }
         ]
     }

@@ -52,9 +52,9 @@ public class Commons {
             sharedBus.releaseName(key);
             sharedBus.cancelAdvertiseName(key, SessionOpts.TRANSPORT_ANY);
             sharedBus.cancelFindAdvertisedName(key);
-            sharedBus.disconnect();
-            sharedBus.release();
-            sharedBus=null;
+          //  sharedBus.disconnect();
+          //  sharedBus.release();
+          //  sharedBus=null;
         }
         if(sharedBusListener==null) {
             sharedBusListener = new BusListener() {

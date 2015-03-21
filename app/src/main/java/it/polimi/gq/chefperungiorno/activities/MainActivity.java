@@ -103,6 +103,8 @@ public class MainActivity extends Activity implements TurnListener {
 
         }
 
+
+
         beaconSightingListener=new
 
                 BeaconEventListener() {
@@ -139,13 +141,14 @@ public class MainActivity extends Activity implements TurnListener {
 
 
         if(!mode.equals(Commons.MULTI_MODE_SLAVE)){
-
             index=0;
             maxIndex=Commons.DISH_COUNT;
         }
         else{
             index = Commons.DISH_COUNT;
             maxIndex = index + Commons.DISH_COUNT;
+            ImageView v = (ImageView) findViewById(R.id.team);
+            v.setImageResource(R.drawable.purple_team);
         }
 
         selectedItems=new ArrayList<String>();

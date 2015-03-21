@@ -1,17 +1,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="32dp"
-    android:paddingRight="32dp"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp" tools:context=".MainActivity"
+    tools:context=".MainActivity"
     android:id="@+id/linear_main"
     android:background="@drawable/sfondo"
     android:orientation="horizontal">
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/logo_chef"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
 
+        />
     <LinearLayout
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:layout_width="fill_parent"
-        android:paddingRight="16dp"
         android:layout_height="fill_parent"
         android:gravity="center">
         <RelativeLayout
@@ -61,7 +71,7 @@
 
             <GridView
                 android:id="@+id/ingredients"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:numColumns="3"
                 android:layout_height="wrap_content"
                 android:columnWidth="120dp"
@@ -69,11 +79,20 @@
                 android:layout_gravity="center_vertical"
                 android:stretchMode="spacingWidthUniform"
                 android:listSelector="#00000000"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/selected_dish" />
+
         </RelativeLayout>
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/team"
+        android:src="@drawable/orange_team"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        />
 
 </RelativeLayout>

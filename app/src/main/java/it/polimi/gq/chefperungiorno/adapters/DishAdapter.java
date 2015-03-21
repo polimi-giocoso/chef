@@ -55,7 +55,6 @@ public class DishAdapter extends ArrayAdapter<Dish> {
         RecordHolder holder = null;
         if (row == null) {
             row = inflater.inflate(layoutId, parent, false);
-            row.setPadding(20,20,20,20);
             holder = new RecordHolder();
             if(showText)
                 holder.txtTitle = (TextView) row.findViewById(R.id.item_text);

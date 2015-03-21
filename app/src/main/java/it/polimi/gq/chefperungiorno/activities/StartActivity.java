@@ -31,6 +31,8 @@ import it.polimi.gq.chefperungiorno.utils.PrefUtils;
 
 public class StartActivity extends Activity {
 
+    static boolean loaded=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +44,12 @@ public class StartActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_start);
-        String s = loadJSONFromAsset(R.raw.data);
-        Game.loadData(s);
 
+        if(!loaded) {
+            String s = loadJSONFromAsset(R.raw.data);
+            Game.loadData(s);
+            loaded=true;
+        }
         String mail=PrefUtils.getFromPrefs(this, PrefUtils.PREFS_MAIL_KEY, null);
         TextView textView = (TextView) this.findViewById(R.id.mail_text_view);
         SpannableString content = null;

@@ -78,7 +78,11 @@ public class Game {
     }
 
     public static List<Dish> allDishes(){
-       return new ArrayList<Dish>(dishes.values());
+        ArrayList<Dish> res=new ArrayList<Dish>();
+        for(Level l : levels)
+            res.addAll(l.getDishes());
+
+       return res;
     }
 
     public static Dish dishWithName(String dishName){
