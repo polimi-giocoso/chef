@@ -15,26 +15,23 @@
         android:layout_marginTop="10dp"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Chef Per Un Giorno"
-        android:id="@+id/textView"
-        android:layout_above="@+id/linearLayout"
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="250dp"
+        android:id="@+id/title"
+        android:src="@drawable/titolo"
+        android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="58dp"
-        android:textSize="70dp"
-        android:textColor="@android:color/tertiary_text_dark"/>
-
+        />
 
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/title"
         android:gravity="center"
         android:id="@+id/linearLayout">
 
@@ -44,7 +41,7 @@
             android:id="@+id/button_single"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginRight="100dp"
+            android:layout_marginRight="50dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/single"
             android:scaleType="fitCenter"
@@ -75,7 +72,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="changeEmail"/>
-
 
 
 
