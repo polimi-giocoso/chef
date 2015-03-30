@@ -160,7 +160,6 @@ public class ChooseSessionActivity extends Activity {
 
         for(int i=0; i<numItems; i++){
             res[i]=list.get(i).getName();
-            res[i]="Macedonia 1";
         }
 
         Intent intent = new Intent(this, MainActivity.class);
