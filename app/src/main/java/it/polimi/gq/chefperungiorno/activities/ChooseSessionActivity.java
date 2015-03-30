@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import it.polimi.gq.chefperungiorno.R;
 import it.polimi.gq.chefperungiorno.adapters.DishAdapter;
@@ -37,7 +38,6 @@ import it.polimi.gq.chefperungiorno.utils.Commons;
 public class ChooseSessionActivity extends Activity {
     private List<Dish> dishes;
     private List<String> selectedItems;
-    int numItems;
     private String mode;
 
     @Override
@@ -52,15 +52,17 @@ public class ChooseSessionActivity extends Activity {
 
 
         mode = getIntent().getExtras().getString("mode");
-        if(mode.equals(Commons.SINGLE_MODE))
-            numItems=Commons.DISH_COUNT;
-        else {
-            numItems = Commons.DISH_COUNT * 2;
+        TextView t = (TextView) findViewById(R.id.action_label);
+
+        if(!mode.equals(Commons.SINGLE_MODE)) {
+            t.setText(t.getText().toString().replace(" n ", " "+Commons.DISH_COUNT_OPT_2+" "));
             Commons.sharedBus.registerSignalHandlers(this);
         }
+        else{
+            t.setText(t.getText().toString().replace(" n ", " "+Commons.DISH_COUNT_OPT_1+" o "+Commons.DISH_COUNT_OPT_2+" "));
+        }
 
-        TextView t = (TextView) findViewById(R.id.action_label);
-        t.setText(t.getText().toString().replace(" n ", " "+numItems+" "));
+
 
         GridView gv = (GridView) findViewById(R.id.grid_dish);
 
@@ -77,14 +79,21 @@ public class ChooseSessionActivity extends Activity {
                if(selectedItems.contains(dish.getName())){
                    selectedItems.remove(dish.getName());
 
-                   button.setEnabled(false);
                }
-               else if(selectedItems.size() < numItems) {
+               else if(selectedItems.size() < Commons.DISH_COUNT_OPT_2) {
                    selectedItems.add(dish.getName());
-
-                   if(selectedItems.size()==numItems){
+               }
+               if(mode.equals(Commons.SINGLE_MODE)) {
+                   if (selectedItems.size() == Commons.DISH_COUNT_OPT_1 || selectedItems.size() == Commons.DISH_COUNT_OPT_2) {
                        button.setEnabled(true);
-                   }
+                   } else
+                       button.setEnabled(false);
+               }
+               else {
+                   if (selectedItems.size() == Commons.DISH_COUNT_OPT_2) {
+                       button.setEnabled(true);
+                   } else
+                       button.setEnabled(false);
                }
                 ((GridView)parent).clearChoices();
                 dA.notifyDataSetChanged();
@@ -135,10 +144,23 @@ public class ChooseSessionActivity extends Activity {
 
         List<Dish> list = new ArrayList<Dish>(dishes);
         Collections.shuffle(list);
+
+        int numItems;
+        if(mode.equals(Commons.SINGLE_MODE)){
+         if(new Random().nextInt(2)==0)
+            numItems=Commons.DISH_COUNT_OPT_1;
+         else
+            numItems=Commons.DISH_COUNT_OPT_2;
+         }
+        else
+            numItems=Commons.DISH_COUNT_OPT_2;
+
+
         String[] res = new String[numItems];
 
         for(int i=0; i<numItems; i++){
             res[i]=list.get(i).getName();
+            res[i]="Macedonia 1";
         }
 
         Intent intent = new Intent(this, MainActivity.class);

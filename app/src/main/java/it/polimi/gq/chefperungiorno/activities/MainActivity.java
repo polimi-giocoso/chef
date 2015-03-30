@@ -2,23 +2,30 @@ package it.polimi.gq.chefperungiorno.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.alljoyn.bus.BusException;
@@ -104,7 +111,6 @@ public class MainActivity extends Activity implements TurnListener {
         }
 
 
-
         beaconSightingListener=new
 
                 BeaconEventListener() {
@@ -140,19 +146,35 @@ public class MainActivity extends Activity implements TurnListener {
           dishes.add(Game.dishWithName((String) d));
 
 
-        if(!mode.equals(Commons.MULTI_MODE_SLAVE)){
-            index=0;
-            maxIndex=Commons.DISH_COUNT;
-        }
-        else{
-            index = Commons.DISH_COUNT;
-            maxIndex = index + Commons.DISH_COUNT;
+        if(mode.equals(Commons.MULTI_MODE_SLAVE)){
+            index=Commons.DISH_COUNT_OPT_1;
+            maxIndex=Commons.DISH_COUNT_OPT_2;
             ImageView v = (ImageView) findViewById(R.id.team);
             v.setImageResource(R.drawable.purple_team);
         }
+        else if(mode.equals(Commons.MULTI_MODE_MASTER)){
+            index=0;
+            maxIndex=Commons.DISH_COUNT_OPT_1;
+        }
+        else{
+            index = 0;
+            maxIndex = names.length;
+        }
 
         selectedItems=new ArrayList<String>();
-        dA = new TableAdapter(this, dishes, R.layout.big_row_items, selectedItems);
+        List<Integer> placeholders=new ArrayList<Integer>();
+        placeholders.add(R.drawable.piatto_1);
+        placeholders.add(R.drawable.piatto_2);
+        if(!mode.equals(Commons.SINGLE_MODE)) {
+            placeholders.add(R.drawable.piatto_3);
+            placeholders.add(R.drawable.piatto_4);
+        }
+        else if(names.length==Commons.DISH_COUNT_OPT_2) {
+            placeholders.add(R.drawable.piatto_1);
+            placeholders.add(R.drawable.piatto_2);
+        }
+
+        dA = new TableAdapter(this, dishes, R.layout.big_row_items, selectedItems, placeholders);
         GridView gv = (GridView) findViewById(R.id.table);
         gv.setAdapter(dA);
 
@@ -165,20 +187,33 @@ public class MainActivity extends Activity implements TurnListener {
 
         nextTurn();
 
-
     }
 
     public void nextTurn(){
 
         if(index == maxIndex){
 
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.congrats)
-                    .setMessage(getResources().getString(R.string.session_end))
-                    .setPositiveButton(R.string.ok, null).show();
+            final Dialog builder = new Dialog(this);
+            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            builder.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+
+            ImageButton button = new ImageButton(this);
+            button.setImageResource(R.drawable.dialog_ok);
+            button.setBackgroundColor(Color.TRANSPARENT);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    builder.dismiss();
+                }
+            });
+            builder.addContentView(button, new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            builder.setCancelable(false);
+            builder.show();
             return;
-
         }
 
         types.clear();
@@ -203,6 +238,8 @@ public class MainActivity extends Activity implements TurnListener {
 
         turn = new Turn(d, this);
 
+
+
     }
 
     protected void onResume() {
@@ -222,7 +259,6 @@ public class MainActivity extends Activity implements TurnListener {
         PlaceManager.getInstance().startMonitoring();
         beaconManager.startListening();
         System.out.println("Starting beacons");
-
     }
 
 
@@ -264,17 +300,36 @@ public class MainActivity extends Activity implements TurnListener {
 
             }
             else {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.congrats_dish)
-                        .setMessage(getResources().getString(R.string.turn_done))
-                        .setPositiveButton(R.string.cont, new DialogInterface.OnClickListener() {
+
+                final Dialog builder = new Dialog(this);
+                builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                builder.getWindow().setBackgroundDrawable(
+                        new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+
+                ImageButton button = new ImageButton(this);
+                button.setImageResource(R.drawable.dialog_next);
+                button.setBackgroundColor(Color.TRANSPARENT);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void run() {
                                 selectedItems.add(g.getDish().getName());
                                 dA.notifyDataSetChanged();
                                 nextTurn();
+                                builder.dismiss();
                             }
-                        }).setCancelable(false).show();
+                        });
+                    }
+                });
+                builder.addContentView(button, new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                builder.setCancelable(false);
+                builder.show();
+
             }
 
         }

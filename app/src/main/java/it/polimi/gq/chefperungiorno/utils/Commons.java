@@ -30,7 +30,9 @@ public class Commons {
     final static public String MULTI_MODE_SLAVE = "multi-slave";
     final static public String MULTI_MODE_MASTER = "multi-master";
 
-    final static public int DISH_COUNT = 2;
+    final static public int DISH_COUNT_OPT_1 = 2;
+    final static public int DISH_COUNT_OPT_2 = 4;
+
     final static public int PROXIMITY_THRESHOLD = -60;
     public static BusAttachment sharedBus;
     public static MultiPlayerService sharedInterface;

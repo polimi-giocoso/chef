@@ -228,7 +228,7 @@ public class MultiPlayerConfigActivity extends Activity {
         if(content[0].equals("dishes")){
            final String[] dishes = new String[4];
 
-            for(int i=1; i<1+Commons.DISH_COUNT*2; i++){
+            for(int i=1; i<1+Commons.DISH_COUNT_OPT_2; i++){
                 dishes[i-1]=content[i];
             }
 

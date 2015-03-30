@@ -23,15 +23,17 @@ public class TableAdapter extends ArrayAdapter<Dish> {
     private Context context;
     private List<Dish> dishes;
     List<String> selectedItems;
+    List<Integer> placeholders;
     int layoutId;
     private LayoutInflater inflater;
 
-    public TableAdapter(Context context, List<Dish> dishes, int layoutId, List<String> selectedItems) {
+    public TableAdapter(Context context, List<Dish> dishes, int layoutId, List<String> selectedItems, List<Integer>placeholders) {
         super(context, layoutId, dishes);
         this.layoutId = layoutId;
         this.context = context;
         this.dishes=dishes;
         this.selectedItems=selectedItems;
+        this.placeholders=placeholders;
         inflater = ((Activity) context).getLayoutInflater();
     }
 
@@ -55,7 +57,7 @@ public class TableAdapter extends ArrayAdapter<Dish> {
         Dish item = dishes.get(position);
 
 
-        holder.placeHolder.setImageResource(context.getResources().getIdentifier("piatto_"+(position+1), "drawable", context.getPackageName()));
+        holder.placeHolder.setImageResource(placeholders.get(position));
 
 
 
