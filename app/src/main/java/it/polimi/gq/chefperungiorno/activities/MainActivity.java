@@ -145,7 +145,6 @@ public class MainActivity extends Activity implements TurnListener {
       for (Object d : names)
           dishes.add(Game.dishWithName((String) d));
 
-
         if(mode.equals(Commons.MULTI_MODE_SLAVE)){
             index=Commons.DISH_COUNT_OPT_1;
             maxIndex=Commons.DISH_COUNT_OPT_2;
@@ -539,8 +538,5 @@ public class MainActivity extends Activity implements TurnListener {
                 }).setNegativeButton(R.string.no, null).setCancelable(false).show();
 
     }
-
-
-
 
 }

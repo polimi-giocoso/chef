@@ -8,8 +8,10 @@ import java.util.List;
  */
 public class TurnResult {
 
+    public String dishName;
     public Date beginDate;
     public Date endDate;
     public long duration;
     public List<String> ingredientsOrder;
+    public List<String> wrongIngredients;
 }

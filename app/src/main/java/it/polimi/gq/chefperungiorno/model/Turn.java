@@ -14,6 +14,8 @@ public class Turn {
 
     private final Dish dish;
     private final List<String> ingredientsAdded;
+    private final Set<String> wrongIngredients;
+
     private final TurnListener listener;
     private final Level level;
     private boolean completed;
@@ -24,6 +26,7 @@ public class Turn {
         this.listener = listener;
         level = Game.getLevelOfDish(dish);
         ingredientsAdded = new ArrayList<String>();
+        wrongIngredients = new HashSet<String>();
         numOfIngredients = dish.getIngredients().size();
         beginDate=new Date();
     }
@@ -60,6 +63,9 @@ public class Turn {
                 int wr = numOfWrongIngredients();
                 listener.wrongIngredientAdded(this, name);
             }
+
+            if(!dish.containsIngredient(name))
+                wrongIngredients.add(name);
         }
     }
 
@@ -118,6 +124,7 @@ public class Turn {
 
     public TurnResult createResult(){
         TurnResult result = new TurnResult();
+        result.dishName=dish.getName();
         result.beginDate=beginDate;
         result.endDate=new Date();
         result.duration = (result.endDate.getTime()-beginDate.getTime())/1000;
@@ -131,6 +138,7 @@ public class Turn {
         }
 
         result.ingredientsOrder=orderedIngredients;
+        result.wrongIngredients=new ArrayList<String>(wrongIngredients);
 
         return result;
     }
