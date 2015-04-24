@@ -12,6 +12,6 @@ public class TurnResult {
     public Date beginDate;
     public Date endDate;
     public long duration;
-    public List<String> ingredientsOrder;
+    public List<String> correctIngredients;
     public List<String> wrongIngredients;
 }

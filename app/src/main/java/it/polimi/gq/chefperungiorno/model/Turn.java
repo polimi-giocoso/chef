@@ -16,19 +16,20 @@ public class Turn {
 
     private final Dish dish;
     private final List<String> ingredientsAdded;
+
     private final Map<String, Set<String>> ingredientIds;
 
     private final Set<String> wrongIngredients;
 
-    private final TurnListener listener;
+    private final TurnListener turnListener;
     private final Level level;
     private boolean completed;
     private int numOfIngredients;
     private Date beginDate;
 
-    public Turn(Dish dish, TurnListener listener){
+    public Turn(Dish dish, TurnListener turnListener){
         this.dish = dish;
-        this.listener = listener;
+        this.turnListener = turnListener;
         level = Game.getLevelOfDish(dish);
         ingredientsAdded = new ArrayList<String>();
         wrongIngredients = new HashSet<String>();
@@ -64,27 +65,26 @@ public class Turn {
 
             if (dish.containsIngredient(name) && !ingredientsAdded.contains(name)) {
                 ingredientsAdded.add(name);
-                listener.ingredientAdded(this, name);
+                turnListener.ingredientAdded(this, name);
 
                 int ok = numOfCorrectIngredients();
                 int wr = numOfWrongIngredients();
                 if(ok==numOfIngredients && wr==0) {
                     completed=true;
-                    listener.dishCompleted(this, createResult());
+                    turnListener.dishCompleted(this, createResult());
                 }
             }
             else if(!dish.containsIngredient(name) && !ingredientsAdded.contains(name)){
                 ingredientsAdded.add(name);
-                int wr = numOfWrongIngredients();
-                listener.wrongIngredientAdded(this, name);
-            }
-
-            if(!dish.containsIngredient(name))
                 wrongIngredients.add(name);
+                int wr = numOfWrongIngredients();
+                turnListener.wrongIngredientAdded(this, name);
+            }
         }
     }
 
     public void removeIngredient(String name, String id) throws GameAlreadyCompletedException {
+
         synchronized (this) {
             if(completed)
                 throw new GameAlreadyCompletedException();
@@ -105,16 +105,16 @@ public class Turn {
             }
 
             if (dish.containsIngredient(name) && ids.isEmpty()) {
-                listener.ingredientRemoved(this, name);
+                turnListener.ingredientRemoved(this, name);
             }
             else if(!dish.containsIngredient(name) && ids.isEmpty()){
                 int wr=numOfWrongIngredients();
-                listener.wrongIngredientRemoved(this, name, wr!=0);
+                turnListener.wrongIngredientRemoved(this, name, wr != 0);
 
                 int ok=numOfCorrectIngredients();
                 if(wr==0 && ok==numOfIngredients){
                     completed=true;
-                    listener.dishCompleted(this, createResult());
+                    turnListener.dishCompleted(this, createResult());
                 }
             }
         }
@@ -147,22 +147,22 @@ public class Turn {
 
     }
 
-    public TurnResult createResult(){
+    public TurnResult createResult()
+    {
         TurnResult result = new TurnResult();
         result.dishName=dish.getName();
         result.beginDate=beginDate;
         result.endDate=new Date();
         result.duration = (result.endDate.getTime()-beginDate.getTime())/1000;
-        List<String> orderedIngredients=new ArrayList<String>();
+        result.correctIngredients =new ArrayList<String>();
 
         for(String i : ingredientsAdded){
-            if(!orderedIngredients.contains(i))
-                orderedIngredients.add(i);
-            if(orderedIngredients.size()==numOfIngredients)
-                break;;
+            if(!result.correctIngredients.contains(i))
+                result.correctIngredients.add(i);
+            if(result.correctIngredients.size()==numOfIngredients)
+                break;
         }
 
-        result.ingredientsOrder=orderedIngredients;
         result.wrongIngredients=new ArrayList<String>(wrongIngredients);
 
         return result;

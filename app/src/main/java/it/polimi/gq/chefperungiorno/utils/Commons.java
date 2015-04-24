@@ -115,7 +115,7 @@ public class Commons {
             protected Void doInBackground(Void... params) {
                 try {
                     String ing = null;
-                    for(String i : result.ingredientsOrder){
+                    for(String i : result.correctIngredients){
                         if(ing == null)
                             ing=i;
                         else
