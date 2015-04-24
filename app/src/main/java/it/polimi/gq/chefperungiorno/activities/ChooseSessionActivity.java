@@ -36,6 +36,7 @@ import it.polimi.gq.chefperungiorno.utils.Commons;
 
 
 public class ChooseSessionActivity extends Activity {
+
     private List<Dish> dishes;
     private List<String> selectedItems;
     private String mode;

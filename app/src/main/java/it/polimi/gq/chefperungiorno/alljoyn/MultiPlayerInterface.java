@@ -10,7 +10,6 @@ import org.alljoyn.bus.annotation.BusSignal;
 @BusInterface(name = "it.polimi.gq.chefperungiorno.multiplay")
 public interface MultiPlayerInterface {
 
-
     @BusSignal
     public void sendMessage(String message) throws BusException;
 

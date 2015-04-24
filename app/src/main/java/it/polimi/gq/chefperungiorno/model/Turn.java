@@ -2,8 +2,10 @@ package it.polimi.gq.chefperungiorno.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,17 +16,21 @@ public class Turn {
 
     private final Dish dish;
     private final List<String> ingredientsAdded;
+    private final Map<String, Set<String>> ingredientIds;
+
     private final TurnListener listener;
     private final Level level;
     private boolean completed;
     private int numOfIngredients;
     private Date beginDate;
+
     public Turn(Dish dish, TurnListener listener){
         this.dish = dish;
         this.listener = listener;
         level = Game.getLevelOfDish(dish);
         ingredientsAdded = new ArrayList<String>();
         numOfIngredients = dish.getIngredients().size();
+        ingredientIds = new HashMap<String, Set<String>>();
         beginDate=new Date();
     }
 
@@ -38,22 +44,31 @@ public class Turn {
         return dish;
     }
 
-    public void tryIngredient(String name) throws GameAlreadyCompletedException {
+    public void tryIngredient(String name, String id) throws GameAlreadyCompletedException {
         synchronized (this) {
 
             if(completed)
                 throw new GameAlreadyCompletedException();
 
+            Set<String> ids = ingredientIds.get(name);
+            if(ids==null)
+            {
+                ids = new HashSet<String>();
+                ingredientIds.put(name, ids);
+            }
+
+            ids.add(id);
+
             if (dish.containsIngredient(name) && !ingredientsAdded.contains(name)) {
                 ingredientsAdded.add(name);
                 listener.ingredientAdded(this, name);
+
                 int ok = numOfCorrectIngredients();
                 int wr = numOfWrongIngredients();
                 if(ok==numOfIngredients && wr==0) {
                     completed=true;
                     listener.dishCompleted(this, createResult());
                 }
-
             }
             else if(!dish.containsIngredient(name) && !ingredientsAdded.contains(name)){
                 ingredientsAdded.add(name);
@@ -63,7 +78,7 @@ public class Turn {
         }
     }
 
-    public void removeIngredient(String name) throws GameAlreadyCompletedException {
+    public void removeIngredient(String name, String id) throws GameAlreadyCompletedException {
         synchronized (this) {
             if(completed)
                 throw new GameAlreadyCompletedException();
@@ -71,12 +86,22 @@ public class Turn {
             if(!ingredientsAdded.contains(name))
                 return;
 
-            ingredientsAdded.remove(name);
+            Set<String> ids = ingredientIds.get(name);
+            if(ids==null)
+            {
+                ids = new HashSet<String>();
+                ingredientIds.put(name, ids);
+            }
 
-            if (dish.containsIngredient(name) && !ingredientsAdded.contains(name)) {
+            ids.remove(id);
+            if(ids.isEmpty()) {
+                ingredientsAdded.remove(name);
+            }
+
+            if (dish.containsIngredient(name) && ids.isEmpty()) {
                 listener.ingredientRemoved(this, name);
             }
-            else if(!dish.containsIngredient(name)){
+            else if(!dish.containsIngredient(name) && ids.isEmpty()){
                 int wr=numOfWrongIngredients();
                 listener.wrongIngredientRemoved(this, name, wr!=0);
 

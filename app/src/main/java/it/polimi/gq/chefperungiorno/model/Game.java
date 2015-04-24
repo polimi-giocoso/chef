@@ -28,7 +28,7 @@ public class Game {
             Map<String, Ingredient> ingredientsMap= new HashMap<String, Ingredient>();
             Iterator<String> it = data.getJSONObject("ingredients").keys();
 
-            while(it.hasNext()){
+            while(it.hasNext()) {
                 String key = it.next();
                 JSONObject ingredientObj = data.getJSONObject("ingredients").getJSONObject(key);
                 Ingredient ingredient = new Ingredient();

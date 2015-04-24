@@ -34,6 +34,7 @@ public class DishAdapter extends ArrayAdapter<Dish> {
     int layoutId;
     private LayoutInflater inflater;
     private boolean showText;
+
     public DishAdapter(Context context, List<Dish> dishes, int layoutId, List<String> selectedItems) {
         super(context, layoutId, dishes);
         this.layoutId = layoutId;

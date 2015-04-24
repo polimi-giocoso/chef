@@ -9,6 +9,7 @@ public class Ingredient {
 
     private String description;
 
+
     public String getName() {
         return name;
     }

@@ -50,6 +50,7 @@ public class StartActivity extends Activity {
             Game.loadData(s);
             loaded=true;
         }
+
         String mail=PrefUtils.getFromPrefs(this, PrefUtils.PREFS_MAIL_KEY, null);
         TextView textView = (TextView) this.findViewById(R.id.mail_text_view);
         SpannableString content = null;

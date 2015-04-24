@@ -3,85 +3,69 @@ package it.polimi.gq.chefperungiorno.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.Status;
 import org.alljoyn.bus.annotation.BusSignalHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import it.polimi.gq.chefperungiorno.R;
-import it.polimi.gq.chefperungiorno.adapters.DishAdapter;
 import it.polimi.gq.chefperungiorno.adapters.IngredientAdapter;
 import it.polimi.gq.chefperungiorno.adapters.TableAdapter;
+import it.polimi.gq.chefperungiorno.beacons.ChefBeaconListener;
 import it.polimi.gq.chefperungiorno.model.Dish;
 import it.polimi.gq.chefperungiorno.model.Game;
-import it.polimi.gq.chefperungiorno.model.Ingredient;
 import it.polimi.gq.chefperungiorno.model.Turn;
 import it.polimi.gq.chefperungiorno.model.TurnListener;
 import it.polimi.gq.chefperungiorno.model.TurnResult;
 import it.polimi.gq.chefperungiorno.utils.Commons;
-import it.polimi.gq.chefperungiorno.utils.GMailSender;
 
-import com.gimbal.android.BeaconEventListener;
 import com.gimbal.android.BeaconManager;
-import com.gimbal.android.BeaconSighting;
 import com.gimbal.android.Gimbal;
 import com.gimbal.android.PlaceManager;
-
-import javax.sql.CommonDataSource;
 
 public class MainActivity extends Activity implements TurnListener {
 
     private List<Dish> dishes;
-    private List<IngredientAdapter.IngredientType> types;
     private Turn turn;
-    private BeaconEventListener beaconSightingListener;
+
+    private ChefBeaconListener beaconEventListener;
+
     private BeaconManager beaconManager;
+
     private IngredientAdapter ia;
     private TableAdapter dA;
+    private List<IngredientAdapter.IngredientType> types;
+    private List<String> completedDishes;
+
     private String mode;
-    int index;
-    int maxIndex;
-    private List<String> selectedItems;
+
+    private int currentDishIndex;
+    private int dishMaxIndex;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         final MainActivity self = this;
-
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -96,7 +80,6 @@ public class MainActivity extends Activity implements TurnListener {
                 System.exit(0);
         }
 
-
         System.out.println("Create");
 
         if(mode.equals(Commons.MULTI_MODE_MASTER)){
@@ -110,29 +93,18 @@ public class MainActivity extends Activity implements TurnListener {
 
         }
 
+        beaconEventListener = new ChefBeaconListener();
 
-        beaconSightingListener=new
 
-                BeaconEventListener() {
-                    @Override
-                    public void onBeaconSighting (BeaconSighting sighting){
-                        int rssi = sighting.getRSSI();
-                        Log.i("Proximity", "SIGHT ID: " + sighting.getBeacon().getName() + " RSSI: " + rssi + "");
+        Log.i("MAIN", "Init");
 
-                        if (turn == null)
-                            return;
+        Gimbal.setApiKey(this.getApplication(), "0a32127b-b7e9-4314-adb7-489876c4ba3d");
 
-                        try {
-                            if (rssi > Commons.PROXIMITY_THRESHOLD)
-                                turn.tryIngredient(sighting.getBeacon().getName());
-                            else
-                                turn.removeIngredient(sighting.getBeacon().getName());
-
-                        } catch (Turn.GameAlreadyCompletedException e) {
-                        }
-
-                    }
-                };
+        System.out.println("Starting beacons");
+        beaconManager = new BeaconManager();
+        beaconManager.addListener(beaconEventListener);
+        PlaceManager.getInstance().startMonitoring();
+        beaconManager.startListening();
 
         setup();
 
@@ -147,21 +119,21 @@ public class MainActivity extends Activity implements TurnListener {
 
 
         if(mode.equals(Commons.MULTI_MODE_SLAVE)){
-            index=Commons.DISH_COUNT_OPT_1;
-            maxIndex=Commons.DISH_COUNT_OPT_2;
+            currentDishIndex =Commons.DISH_COUNT_OPT_1;
+            dishMaxIndex =Commons.DISH_COUNT_OPT_2;
             ImageView v = (ImageView) findViewById(R.id.team);
             v.setImageResource(R.drawable.purple_team);
         }
         else if(mode.equals(Commons.MULTI_MODE_MASTER)){
-            index=0;
-            maxIndex=Commons.DISH_COUNT_OPT_1;
+            currentDishIndex =0;
+            dishMaxIndex =Commons.DISH_COUNT_OPT_1;
         }
         else{
-            index = 0;
-            maxIndex = names.length;
+            currentDishIndex = 0;
+            dishMaxIndex = names.length;
         }
 
-        selectedItems=new ArrayList<String>();
+        completedDishes =new ArrayList<String>();
         List<Integer> placeholders=new ArrayList<Integer>();
         placeholders.add(R.drawable.piatto_1);
         placeholders.add(R.drawable.piatto_2);
@@ -174,7 +146,7 @@ public class MainActivity extends Activity implements TurnListener {
             placeholders.add(R.drawable.piatto_2);
         }
 
-        dA = new TableAdapter(this, dishes, R.layout.big_row_items, selectedItems, placeholders);
+        dA = new TableAdapter(this, dishes, R.layout.big_row_items, completedDishes, placeholders);
         GridView gv = (GridView) findViewById(R.id.table);
         gv.setAdapter(dA);
 
@@ -191,13 +163,14 @@ public class MainActivity extends Activity implements TurnListener {
 
     public void nextTurn(){
 
-        if(index == maxIndex){
+        if(currentDishIndex == dishMaxIndex){
 
             final Dialog builder = new Dialog(this);
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
             builder.getWindow().setBackgroundDrawable(
                     new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+            beaconEventListener.setTurn(null);
 
             ImageButton button = new ImageButton(this);
             button.setImageResource(R.drawable.dialog_ok);
@@ -218,7 +191,7 @@ public class MainActivity extends Activity implements TurnListener {
 
         types.clear();
 
-        Dish d = dishes.get(index++);
+        Dish d = dishes.get(currentDishIndex++);
 
         int resID = getResources().getIdentifier(d.getImageName(), "drawable", getPackageName());
         if (resID == 0)
@@ -228,6 +201,7 @@ public class MainActivity extends Activity implements TurnListener {
         imageView.setImageResource(resID);
 
         turn = new Turn(d, this);
+
         int i=turn.getNumberOfIngredients();
 
         for(int j=0; j<i; j++){
@@ -236,9 +210,7 @@ public class MainActivity extends Activity implements TurnListener {
 
         ia.notifyDataSetChanged();
 
-        turn = new Turn(d, this);
-
-
+        beaconEventListener.setTurn(turn);
 
     }
 
@@ -253,35 +225,24 @@ public class MainActivity extends Activity implements TurnListener {
     public void onStart(){
         super.onStart();
 
-        Gimbal.setApiKey(this.getApplication(), "0a32127b-b7e9-4314-adb7-489876c4ba3d");
-        beaconManager = new BeaconManager();
-        beaconManager.addListener(beaconSightingListener);
-        PlaceManager.getInstance().startMonitoring();
-        beaconManager.startListening();
-        System.out.println("Starting beacons");
-    }
 
+    }
 
     public void onStop(){
         super.onStop();
-        System.out.println("Stop");
-        synchronized(this) {
-            if (beaconManager != null) {
-                beaconManager.removeListener(beaconSightingListener);
-                beaconManager.stopListening();
-            }
-        }
-       
     }
 
     protected void onDestroy(){
+        synchronized(this) {
+            if (beaconManager != null) {
+                beaconManager.removeListener(beaconEventListener);
+                beaconManager.stopListening();
+            }
+        }
         if(!mode.equals(Commons.SINGLE_MODE))
             Commons.sharedBus.unregisterSignalHandlers(this);
         super.onDestroy();
-
-
     }
-
 
     @Override
     public void dishCompleted(final Turn g, final TurnResult result) {
@@ -293,8 +254,8 @@ public class MainActivity extends Activity implements TurnListener {
 
             Commons.sendEmail(result, this);
 
-            if(index==maxIndex){
-                selectedItems.add(g.getDish().getName());
+            if(currentDishIndex == dishMaxIndex){
+                completedDishes.add(g.getDish().getName());
                 dA.notifyDataSetChanged();
                 nextTurn();
 
@@ -316,7 +277,7 @@ public class MainActivity extends Activity implements TurnListener {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                selectedItems.add(g.getDish().getName());
+                                completedDishes.add(g.getDish().getName());
                                 dA.notifyDataSetChanged();
                                 nextTurn();
                                 builder.dismiss();
@@ -348,6 +309,7 @@ public class MainActivity extends Activity implements TurnListener {
                     break;
                 j++;
             }
+
             types.set(j, IngredientAdapter.IngredientType.OK);
 
         }
@@ -512,7 +474,7 @@ public class MainActivity extends Activity implements TurnListener {
                 @Override
                 public void run() {
                     String[] content = message.split(",");
-                    selectedItems.add(content[1]);
+                    completedDishes.add(content[1]);
                     dA.notifyDataSetChanged();
                 }
             });
@@ -541,6 +503,28 @@ public class MainActivity extends Activity implements TurnListener {
     }
 
 
+/*beaconSightingListener = new PlaceEventListener() {
+            @Override
+            public void onVisitStart(Visit visit) {
+                super.onVisitStart(visit);
+                try {
+                    Log.i("Main", "visit start"+visit.getPlace().getName());
+                    turn.tryIngredient(visit.getPlace().getName(), visit.getPlace().getIdentifier());
+                }
+                catch (Turn.GameAlreadyCompletedException e) {
+                }
+            }
 
+            @Override
+            public void onVisitEnd(Visit visit) {
+                super.onVisitEnd(visit);
+                try {
+                    Log.i("Main", "visit end");
+                    turn.removeIngredient(visit.getPlace().getName(), visit.getPlace().getIdentifier());
+                }
+                catch (Turn.GameAlreadyCompletedException e) {
+                }
+            }
+        };*/
 
 }
