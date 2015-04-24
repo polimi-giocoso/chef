@@ -1,5 +1,7 @@
 package it.polimi.gq.chefperungiorno.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +34,7 @@ public class Game {
                 String key = it.next();
                 JSONObject ingredientObj = data.getJSONObject("ingredients").getJSONObject(key);
                 Ingredient ingredient = new Ingredient();
+                Log.i("A", ingredientObj.getString("name"));
                 ingredient.setName(ingredientObj.getString("name"));
                 ingredient.setDescription(ingredientObj.getString("description"));
                 ingredientsMap.put(key, ingredient);

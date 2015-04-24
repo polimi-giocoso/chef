@@ -117,7 +117,6 @@ public class MainActivity extends Activity implements TurnListener {
       for (Object d : names)
           dishes.add(Game.dishWithName((String) d));
 
-
         if(mode.equals(Commons.MULTI_MODE_SLAVE)){
             currentDishIndex =Commons.DISH_COUNT_OPT_1;
             dishMaxIndex =Commons.DISH_COUNT_OPT_2;

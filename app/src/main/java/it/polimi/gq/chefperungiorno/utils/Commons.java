@@ -121,8 +121,24 @@ public class Commons {
                         else
                             ing=ing+","+i;
                     }
+
+                    String errors="errors (";
+                    if(result.wrongIngredients!=null && !result.wrongIngredients.isEmpty())
+                    {
+                        String wrongs = null;
+                        for(String i : result.wrongIngredients){
+                            if(ing == null)
+                                wrongs=i;
+                            else
+                                wrongs=wrongs+","+i;
+                        }
+                        errors+=wrongs;
+                    }
+
+                    errors+=")";
+
                     GMailSender sender = new GMailSender("giocosoapp@gmail.com", "O392oo47o7");
-                    sender.sendMail("Chef per un giorno", result.beginDate.getTime()+","+result.endDate.getTime()+","+result.duration+","+ing,
+                    sender.sendMail("Chef per un giorno", result.dishName+","+result.beginDate.getTime()+","+result.endDate.getTime()+","+result.duration+","+ing+","+errors,
                             "giocosoapp@gmail.com",
                              mail
                             );
