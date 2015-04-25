@@ -251,7 +251,7 @@ public class MainActivity extends Activity implements TurnListener {
 
             Commons.sendMessage("dish," + g.getDish().getName());
 
-            Commons.sendEmail(result, this);
+            Commons.sendEmail(result.toString(), this);
 
             if(currentDishIndex == dishMaxIndex){
                 completedDishes.add(g.getDish().getName());
@@ -386,99 +386,6 @@ public class MainActivity extends Activity implements TurnListener {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-    /*
-    @Override
-    public void serviceStarted() {
-        Log.i("Proximity", "Proximity Service successfully started!!!");
-        if(visitManager!=null)
-            visitManager.stop();
-        visitManager = ProximityFactory.getInstance().createVisitManager();
-        visitManager.setVisitListener(this);
-        visitManager.start();
-    }
-
-    @Override
-    public void startServiceFailed(int errorCode, String message) {
-        String logMsg = String.format("Proximity Service failed with error code %d, message: %s!", errorCode, message);
-        Log.d("Proximity", logMsg);
-        //check for the error Code for Bluetooth status check
-        if (errorCode == ProximityError.PROXIMITY_BLUETOOTH_IS_OFF.getCode()) {
-            //turn on the bluetooth and once the bluetooth is ON call startService again.
-        }
-    }
-
-    @Override
-    public void didArrive(Visit visit) {
-        Log.i("Proximity", "VISIT");
-        if(turn==null)
-            return;
-    }
-
-    @Override
-    public void receivedSighting(Visit visit, Date date, Integer rssi) {
-        Log.i("Proximity", "SIGHT ID: "+visit.getTransmitter().getName()+" RSSI: "+rssi+"");
-
-        if(turn==null)
-            return;
-
-        try {
-             if(rssi>-60)
-                turn.tryIngredient(visit.getTransmitter().getName());
-             else
-                turn.removeIngredient(visit.getTransmitter().getName());
-
-        }
-        catch (Turn.GameAlreadyCompletedException e)
-        {
-        }
-    }
-
-    @Override
-    public void didDepart(Visit visit) {
-
-        Log.i("Proximity", "DEPART");
-
-        if(turn==null)
-            return;
-
-        try {
-            turn.removeIngredient(visit.getTransmitter().getName());
-        }
-        catch (Turn.GameAlreadyCompletedException e)
-        {
-        }
-
-    }
-*/
-    @BusSignalHandler(iface="it.polimi.gq.chefperungiorno.multiplay", signal="sendMessage")
-    public void sendMessage(final String message) throws BusException {
-        String[] content = message.split(",");
-        final Activity self = this;
-        Log.i("Chef","Received a message from the bus "+message);
-        if(content[0].equals("stop"))
-        {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Intent setIntent = new Intent(self, StartActivity.class);
-                    setIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(setIntent);
-                }
-            });
-
-        }
-        else if(content[0].equals("dish")) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String[] content = message.split(",");
-                    completedDishes.add(content[1]);
-                    dA.notifyDataSetChanged();
-                }
-            });
-        }
-
     }
 
     @Override

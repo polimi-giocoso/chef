@@ -35,7 +35,9 @@ public class Commons {
 
     final static public int PROXIMITY_THRESHOLD = -59;
     final static public int DEPART_THRESHOLD = -69;
-    final static public int HYSTERESIS_TOLERANCE = 5;
+
+    // Higher means more resistant to interferences
+    final static public int HYSTERESIS_TOLERANCE = 7;
 
     public static BusAttachment sharedBus;
     public static MultiPlayerService sharedInterface;
@@ -105,43 +107,22 @@ public class Commons {
     }
 
 
-    public static void sendEmail(final TurnResult result, Context context) {
+    public static void sendEmail(final String message, Context context) {
         final String mail = PrefUtils.getFromPrefs(context, PrefUtils.PREFS_MAIL_KEY, null);
-        if(mail==null)
-            return;;
-        new AsyncTask<Void, Void, Void>(){
+        if (mail == null)
+            return;
+
+        new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    String ing = null;
-                    for(String i : result.correctIngredients){
-                        if(ing == null)
-                            ing=i;
-                        else
-                            ing=ing+","+i;
-                    }
 
-                    String errors="errors (";
-                    if(result.wrongIngredients!=null && !result.wrongIngredients.isEmpty())
-                    {
-                        String wrongs = null;
-                        for(String i : result.wrongIngredients){
-                            if(ing == null)
-                                wrongs=i;
-                            else
-                                wrongs=wrongs+","+i;
-                        }
-                        errors+=wrongs;
-                    }
-
-                    errors+=")";
-
-                    GMailSender sender = new GMailSender("giocosoapp@gmail.com", "O392oo47o7");
-                    sender.sendMail("Chef per un giorno", result.dishName+","+result.beginDate.getTime()+","+result.endDate.getTime()+","+result.duration+","+ing+","+errors,
-                            "giocosoapp@gmail.com",
-                             mail
-                            );
+                    GMailSender sender = new GMailSender("appgiocoso@gmail.com", "p0L1T3CN1C0");
+                    sender.sendMail("Chef per un giorno", message,
+                            "Giocoso",
+                            mail
+                    );
                 } catch (Exception e) {
                     Log.e("SendMail", e.getMessage(), e);
                 }

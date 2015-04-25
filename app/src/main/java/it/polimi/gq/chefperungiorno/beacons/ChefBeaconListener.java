@@ -44,8 +44,8 @@ public class ChefBeaconListener extends BeaconEventListener {
                     }
 
                     i++;
-
-                    if(i==4){
+                    System.out.println("Hey");
+                    if(i==10){
                         i=0;
                         turn.tryIngredient(name, id);
                     }
