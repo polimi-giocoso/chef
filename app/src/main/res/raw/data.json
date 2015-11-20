@@ -52,10 +52,6 @@
             "description": "Latticini",
             "name": "Latte"
         },
-        "mango": {
-            "description": "Frutta",
-            "name": "Mango"
-        },
         "mele": {
             "description": "Frutta",
             "name": "Mele"
@@ -129,9 +125,9 @@
                     "mele",
                     "banane",
                     "mirtilli",
+                    "fragole",
                     "kiwi",
-                    "ciliegie",
-                    "mango"
+                    "ciliegie"
                 ],
                 "name": "Macedonia 3"
             },
@@ -192,7 +188,6 @@
                     "cipolle",
                     "piselli",
                     "gamberi",
-                    "pollo",
                     "riso"
                 ],
                 "name": "Paella mista"
@@ -210,7 +205,6 @@
                     "cipolle",
                     "zucchine",
                     "piselli",
-                    "carote",
                     "ceci",
                     "fagioli"
                 ],

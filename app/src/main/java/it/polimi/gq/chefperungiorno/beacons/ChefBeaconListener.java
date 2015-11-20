@@ -1,5 +1,7 @@
 package it.polimi.gq.chefperungiorno.beacons;
 
+import android.util.Log;
+
 import com.gimbal.android.BeaconEventListener;
 import com.gimbal.android.BeaconSighting;
 
@@ -25,7 +27,7 @@ public class ChefBeaconListener extends BeaconEventListener {
         int rssi = sighting.getRSSI();
         String id = sighting.getBeacon().getIdentifier();
         String name = sighting.getBeacon().getName();
-
+        //Log.i("Main", "Seen "+name+" "+rssi+" "+id);
         if (turn == null)
             return;
 
@@ -35,35 +37,31 @@ public class ChefBeaconListener extends BeaconEventListener {
 
             if (rssi > Commons.PROXIMITY_THRESHOLD) {
 
-                if(rssi < Commons.PROXIMITY_THRESHOLD+Commons.HYSTERESIS_TOLERANCE)
-                {
+                if (rssi < Commons.PROXIMITY_THRESHOLD + Commons.HYSTERESIS_TOLERANCE) {
+                    Log.d("ChefBeaconListener", "IN " + name + " " +  rssi);
                     i = hysteresisAvoidance.get(id);
 
-                    if(i==null){
-                        i=0;
+                    if (i == null) {
+                        i = 0;
                     }
 
                     i++;
                     System.out.println("Hey");
-                    if(i==10){
-                        i=0;
+                    if (i == 10) {
+                        i = 0;
                         turn.tryIngredient(name, id);
                     }
-                }
-                else
-                {
+                } else {
                     turn.tryIngredient(name, id);
                 }
-            }
-            else if (rssi < Commons.DEPART_THRESHOLD)
-            {
+            } else if (rssi < Commons.DEPART_THRESHOLD) {
+                Log.d("ChefBeaconListener", "OUT " + name + " " +  rssi);
                 turn.removeIngredient(name, id);
             }
 
             hysteresisAvoidance.put(sighting.getBeacon().getIdentifier(), i);
 
-        }
-        catch (Turn.GameAlreadyCompletedException e) {
+        } catch (Turn.GameAlreadyCompletedException e) {
         }
     }
 

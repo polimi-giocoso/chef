@@ -33,11 +33,11 @@ public class Commons {
     final static public int DISH_COUNT_OPT_1 = 2;
     final static public int DISH_COUNT_OPT_2 = 4;
 
-    final static public int PROXIMITY_THRESHOLD = -59;
+    final static public int PROXIMITY_THRESHOLD = -61;
     final static public int DEPART_THRESHOLD = -69;
 
     // Higher means more resistant to interferences
-    final static public int HYSTERESIS_TOLERANCE = 7;
+    final static public int HYSTERESIS_TOLERANCE = 5;
 
     public static BusAttachment sharedBus;
     public static MultiPlayerService sharedInterface;
